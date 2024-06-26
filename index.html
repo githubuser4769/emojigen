@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Emoji Generator</title>
+    <style>
+        body {
+            margin: 0;
+            /*background: #fcfcfc;*/
+            background-color: #f5f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+            font-family: sans-serif;
+        }
+
+        h1 {
+            font-size: 20px;
+            text-shadow: 3px 3px 4px#c7c7c7;
+        }
+
+        .container {
+            background-color: #ffff;
+            width: 250px;
+            height: 300px;
+            max-width: 300px;
+            box-shadow: 0px 4px 10px 0px rgb(110, 110, 110, 0.4);
+            border-radius: 2px;
+            text-align: center;
+            padding: 20px 10px;
+        }
+
+        .btn {
+            height: 100px;
+            width: 100px;
+            background: rgba(58, 255, 206, 0.24);
+            font-size: 40px;
+            margin: 50px 0px 5px 0px;
+            border-radius: 5px;
+            border-color: rgba(127, 255, 212, 0.238);
+            
+        }
+
+        p {
+            font-size: 16px;
+            margin: 0;
+            padding:16px 30px;
+            text-transform: capitalize;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Random Emoji</h1>
+        <button class="btn" id="btn" disabled>click</button>
+        <p id="emoji-name"></p>
+    </div>
+    <script>
+        const btnE = document.getElementById("btn");
+        const emojiName = document.getElementById("emoji-name");
+        //step 1; create an empty array named emoji
+        const emoji = [];
+        const emoName=[];
+        //step 2 create a function to get the emoji from the server
+        async function getEmoji() {
+            //step 3 : fetch the data using fetch() method
+            let response = await fetch('https://emoji-api.com/emojis?access_key=c44323360e9cd93238e74d744b901f49ad1a69aa');
+            let data = await response.json();
+            for(let i=0;i<150;i++){
+                let emo=data[i].character;
+                emoji.push(emo);
+                emoName.push(data[i].unicodeName.slice(5).replaceAll("-"," "));
+            }
+            btnE.disabled = false;
+           //console.log(data[68].character==
+           //"🥸");
+
+           //console.log(data)
+           //console.log(emoji);
+           //console.log(data[35].character =="🫡")
+        }
+        function showEmoji(){
+            let random = Math.floor(Math.random()*emoji.length);
+           //console.log(random);
+           btnE.innerText=emoji[random];
+           emojiName.innerText=emoName[random];
+           //console.log(emoji[random]+"  "+random)
+        }
+
+
+        btnE.addEventListener("click", () => {
+           showEmoji();
+        });
+        document.addEventListener("keydown",(event)=>{
+            //console.log(event.key)
+            //if(event.key==" "){
+            if(!btnE.disabled){
+                showEmoji();
+            }
+           // alert("space");
+        });
+
+        getEmoji();
+    </script>
+</body>
+
+</html>
